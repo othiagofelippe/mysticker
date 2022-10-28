@@ -16,6 +16,8 @@ import { Header } from "../components/Header";
 import { Button } from "../components/Button";
 import { PositionChoice } from "../components/PositionChoice";
 
+import Retry from "../assets/retry.svg";
+import RotateCamera from "../assets/rotateCamera.svg";
 import { styles } from "./styles";
 import { POSITIONS, PositionProps } from "../utils/positions";
 
@@ -25,6 +27,7 @@ export function Home() {
   const [positionSelected, setPositionSelected] = useState<PositionProps>(
     POSITIONS[0]
   );
+  const [type, setType] = useState(CameraType.back);
 
   const cameraRef = useRef<Camera>(null);
   const screenShotRef = useRef(null);
@@ -37,6 +40,12 @@ export function Home() {
   async function shareScreenShot() {
     const screenShot = await captureRef(screenShotRef);
     await Sharing.shareAsync("file://" + screenShot);
+  }
+
+  function toggleCameraType() {
+    setType((current) =>
+      current === CameraType.back ? CameraType.front : CameraType.back
+    );
   }
 
   useEffect(() => {
@@ -56,11 +65,7 @@ export function Home() {
 
           <View style={styles.picture}>
             {hasCameraPermission && !photo ? (
-              <Camera
-                ref={cameraRef}
-                style={styles.camera}
-                type={CameraType.front}
-              />
+              <Camera ref={cameraRef} style={styles.camera} type={type}  />
             ) : (
               <Image
                 source={{
@@ -85,9 +90,15 @@ export function Home() {
           positionSelected={positionSelected}
         />
 
-        <TouchableOpacity onPress={() => setPhotoURI(null)}>
-          <Text style={styles.retry}>Nova foto</Text>
-        </TouchableOpacity>
+        <View style={styles.tools}>
+          <TouchableOpacity onPress={() => setPhotoURI(null)}>
+            <Retry />
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={toggleCameraType}>
+            <RotateCamera />
+          </TouchableOpacity>
+        </View>
 
         <Button title="Compartilhar" onPress={handleTakePicture} />
       </ScrollView>

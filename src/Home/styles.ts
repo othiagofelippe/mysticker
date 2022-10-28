@@ -35,9 +35,10 @@ export const styles = StyleSheet.create({
   sticker: {
     backgroundColor: "#373D98",
   },
-  retry: {
-    color: "#FFF",
-    fontWeight: "bold",
+  tools: {
+    width: "30%",
+    flexDirection: 'row',
+    justifyContent: "space-between",
     alignSelf: "center",
     marginTop: 22,
     marginBottom: 10,
